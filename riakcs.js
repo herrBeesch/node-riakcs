@@ -26,9 +26,11 @@ var MARK = 'riakcs: ';
 
 // regions
 var STORAGE = 'storage';
+var DEFAULT = '';
 
 var Region = {
     STORAGE : true,
+    DEFAULT : true,
 };
 
 // create our XML parser

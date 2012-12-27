@@ -38,7 +38,8 @@ endPoint[DEFAULT] = "";
 
 // From: http://docs.amazonwebservices.com/general/latest/gr/rande.html#s3_region
 var locationConstraint = {};
-locationConstraint[riakcs.STORAGE] = "";
+// locationConstraint[riakcs.STORAGE] = "";
+locationConstraint[DEFAULT] = "";
 
 var version = '2006-03-01';
 
