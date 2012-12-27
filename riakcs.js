@@ -25,13 +25,12 @@ var awssum = require ("./awssum");
 var MARK = 'riakcs: ';
 
 // regions
-var STORAGE = 'storage';
-var DEFAULT = '';
+var MYREGION = 'myDefaultRegion';
 
 var Region = {
-    STORAGE : true,
-    DEFAULT : true,
+    MYREGION : true,
 };
+
 
 // create our XML parser
 var parser = new xml2js.Parser({ normalize : false, trim : false, explicitRoot : true });
@@ -182,8 +181,8 @@ RiakCS.prototype.addSignature = function(options, signature) {
 // exports
 
 // constants
-exports.STORAGE = STORAGE;
-exports.DEFAULT = DEFAULT;
+
+exports.MYREGION = MYREGION;
 
 // object constructor
 exports.RiakCS = RiakCS;

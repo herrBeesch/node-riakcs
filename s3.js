@@ -242,5 +242,5 @@ _.each(operations, function(operation, operationName) {
 // exports
 
 exports.S3 = S3;
-
+exports.S3.endPoint = endPoint;
 // --------------------------------------------------------------------------------------------------------------------

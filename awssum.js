@@ -45,7 +45,6 @@ var noop = function(){};
 
 function load(path) {
     // since NodeJS caches requires, we won't cache them here
-    console.log(path);
     return require('./' + path);
 }
 
