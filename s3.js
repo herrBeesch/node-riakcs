@@ -33,13 +33,12 @@ var esc = require('./esc');
 var MARK = 'riakcs: ';
 
 var endPoint = {};
-// endPoint[riakcs.STORAGE] = "storage.relax";
-endPoint[DEFAULT] = "";
+
+
 
 // From: http://docs.amazonwebservices.com/general/latest/gr/rande.html#s3_region
 var locationConstraint = {};
-// locationConstraint[riakcs.STORAGE] = "";
-locationConstraint[DEFAULT] = "";
+locationConstraint[riakcs.MYREGION] = "";
 
 var version = '2006-03-01';
 
