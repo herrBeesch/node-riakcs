@@ -42,7 +42,7 @@
     "riakcs",
     "s3"
   ],
-  "_id": "node-riakcs@0.0.1",
+  "_id": "node-riakcs@0.1.0",
   "optionalDependencies": {},
   "_engineSupported": true,
   "_npmVersion": "1.1.22",
