@@ -22,6 +22,6 @@ var s3 = new S3({
     'accessKeyId' : "<YOUR_KEY_ID>",
     'secretAccessKey' : "<YOUR_SECRET>",
     'region' : riakcs.MYREGION
-    'hostname' : "storage.relax"
+    'hostname' : "<YOUR_HOST>"
 });
 ```
