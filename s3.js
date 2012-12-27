@@ -34,7 +34,7 @@ var MARK = 'riakcs: ';
 
 var endPoint = {};
 // endPoint[riakcs.STORAGE] = "storage.relax";
-// endPoint[riakcs.STORAGE] = "storage.relax";
+endPoint[DEFAULT] = "";
 
 // From: http://docs.amazonwebservices.com/general/latest/gr/rande.html#s3_region
 var locationConstraint = {};
