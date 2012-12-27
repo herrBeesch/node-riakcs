@@ -183,6 +183,7 @@ RiakCS.prototype.addSignature = function(options, signature) {
 
 // constants
 exports.STORAGE = STORAGE;
+exports.DEFAULT = DEFAULT;
 
 // object constructor
 exports.RiakCS = RiakCS;
