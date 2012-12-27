@@ -1,7 +1,7 @@
 {
   "name": "node-riakcs",
   "description": "NodeJS module for talking to riakCS provider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Andy Beuge",
     "email": "a.beuge@betzold.de",
