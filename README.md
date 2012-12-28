@@ -25,3 +25,5 @@ var s3 = new S3({
     'hostname' : "<YOUR_HOST>"
 });
 ```
+
+Use the library like the father [awssum](https://github.com/appsattic/node-awssum).
