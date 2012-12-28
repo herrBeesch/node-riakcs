@@ -26,4 +26,4 @@ var s3 = new S3({
 });
 ```
 
-Use the library like the father [awssum](https://github.com/appsattic/node-awssum).
+Use the library like the father [awssum S3 module](https://github.com/appsattic/node-awssum).
