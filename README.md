@@ -21,7 +21,7 @@ S3.endPoint[riakcs.MYREGION] = "<YOUR_HOST_OR_REGION>";
 var s3 = new S3({
     'accessKeyId' : "<YOUR_KEY_ID>",
     'secretAccessKey' : "<YOUR_SECRET>",
-    'region' : riakcs.MYREGION
+    'region' : riakcs.MYREGION,
     'hostname' : "<YOUR_HOST>"
 });
 ```
