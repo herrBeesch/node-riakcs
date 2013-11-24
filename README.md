@@ -1,4 +1,4 @@
-# Node-riakcs -- talk to riakcs like you would with awssum
+# node-riakcs -- talk to riakCS like you would with awssum
 
 ## Install
 

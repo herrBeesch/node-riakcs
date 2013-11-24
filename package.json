@@ -1,6 +1,6 @@
 {
   "name": "node-riakcs",
-  "description": "NodeJS module for talking to riakCS provider",
+  "description": "npm package for NodeJS to talk to riakCS",
   "version": "0.0.2",
   "author": {
     "name": "Andy Beuge",
