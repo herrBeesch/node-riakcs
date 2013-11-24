@@ -73,3 +73,15 @@ s3.CreateUser userArgs, (err, data)->
   if data?
     fmt.dump data, 'data'
 ```
+
+
+### Get use information (as admin user for every user, or for oneself)
+```coffeescript
+require 'fmt'
+
+s3.GetUser { ObjectName : "<USER_KEYS>", UserPath : 'riak-cs/user/'}, (err, data)->
+  if err? 
+    fmt.dump err, 'err'
+  if data?
+    fmt.dump data, 'data'
+```
