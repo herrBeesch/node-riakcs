@@ -18,19 +18,43 @@ var esc = require('./esc');
 
 // --------------------------------------------------------------------------------------------------------------------
 
-function hostBucket(options, args) {
-    var self = this;
+function hostBucket(options, args) {    
+    var self = this;    
     // return args.BucketName + '.' + self.host() + '/' + esc(args.ObjectName);    
     var obj = "";
     if (args.ObjectName){
       obj = pathObject(options, args)
     }
-    return args.BucketName + '.' + self.host() + obj;    
+    var host = args.BucketName + '.' + self.host() + obj;
+    if (!args.BucketName) {
+      host = self.host() + obj;
+    }
+    
+    return host;
+}
+
+function hostUser(options, args) {    
+    var self = this;    
+    var obj = "";
+    if (args.ObjectName){
+      obj = pathObject(options, args)
+    }
+    var up = ""
+    if (args.UserPath){
+      up = '/' + args.UserPath 
+    }
+    var host = self.host() + up + obj;
+    return host;
 }
 
 function pathObject(options, args) {
     var self = this;
-    return '/' + esc(args.ObjectName);
+    if (args.UserPath){
+      return esc(args.ObjectName)
+    }
+    else {
+      return '/' + esc(args.ObjectName);      
+    }
 }
 
 // http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectPUT.html
@@ -2033,6 +2057,54 @@ module.exports = {
                 type     : 'param',
             },
         },
+    },
+
+    CreateUser : {
+        url : 'http://docs.basho.com/riakcs/latest/cookbooks/Account-Management/',
+        // request
+        host   : hostUser,  
+        method : 'POST',
+        args : {
+            Email : {
+                name     : 'email',
+                required : true,
+                type     : 'json',
+            },
+            Name : {
+                name     : 'name',
+                required : true,
+                type     : 'json',
+            },
+            ContentType : {
+                name     : 'Content-Type',
+                required : true,
+                type     : 'header',
+            },
+            UserPath :   {
+                required : true,
+                type     : 'special',
+            },
+        },
+        extractBody : 'json',
+    },
+    
+    GetUser : {
+        url : 'http://docs.basho.com/riakcs/latest/cookbooks/Account-Management/',
+        // request
+        host   : hostUser,
+        path   : pathObject,
+        method : 'GET',
+        args : {
+            ObjectName : {
+                required : true,
+                type     : 'special',
+            },
+            UserPath :   {
+                required : true,
+                type     : 'special',
+            }
+        },
+        extractBody : 'xml',
     },
 
 };

@@ -181,6 +181,11 @@ S3.prototype.strToSign = function(options, args) {
     else {
         strToSign += '/' + args.BucketName + '/';
     }
+    
+    if (!_.isUndefined(args.UserPath)) {
+        strToSign +=  args.UserPath;
+    }
+    
     if ( args && (! _.isUndefined(args.ObjectName)) ) {
         strToSign += esc(args.ObjectName);
     }
@@ -202,7 +207,7 @@ S3.prototype.strToSign = function(options, args) {
         ;
     }
 
-    //console.log('StrToSign :', strToSign + '(Ends)');
+    console.log('StrToSign :', strToSign + '(Ends)');
 
     return strToSign;
 };
@@ -218,8 +223,6 @@ S3.prototype.signature = function(strToSign) {
         .createHmac('sha1', this.secretAccessKey())
         .update(strToSign)
         .digest('base64');
-
-    //console.log('Signature :', signature);
 
     return signature;
 };
