@@ -1,11 +1,11 @@
 {
   "name": "node-riakcs",
   "description": "npm package for NodeJS to talk to riakCS",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Andy Beuge",
     "email": "a.beuge@betzold.de",
-    "url": "http://blog.herrbeesch.fuettertdasnetz.de"
+    "url": "https://blog.herrbeesch.fuettertdasnetz.de"
   },
   "homepage": "https://github.com/herrbeesch/node-riakcs",
   "contributors": [],
