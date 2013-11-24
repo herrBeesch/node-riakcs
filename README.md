@@ -21,11 +21,12 @@ S3.endPoint[riakcs.MYREGION] = "<YOUR_HOST_OR_REGION>";
 var s3 = new S3({
     'accessKeyId' : "<YOUR_KEY_ID>",
     'secretAccessKey' : "<YOUR_SECRET>",
-    'region' : riakcs.MYREGION
+    'region' : riakcs.MYREGION,
     'hostname' : "<YOUR_HOST>"
 });
 ```
 
+<<<<<<< HEAD
 ## Examples (coffeescript + fmt)
 
 ### Get Buckets
@@ -74,3 +75,6 @@ s3.CreateUser userArgs, (err, data)->
   if data?
     fmt.dump data, 'data'
 ```
+=======
+Use the library like the father [awssum S3 module](https://github.com/appsattic/node-awssum) according to the [implemented functions of RiacCS](http://docs.basho.com/riakcs/latest/references/apis/storage/#API-Feature-Comparison).
+>>>>>>> c06879a9f2a69a00a0d278bf156f2bb053dcfe9a
