@@ -897,10 +897,15 @@ AwsSum.prototype.request = function(options, callback) {
     if ( options.params && options.params.length ) {
         reqOptions.path += '?' + self.stringifyQuery( options.params );
     }
+    
+    // if we have any JSON fields, stick it in the body
+    // if ( options.json && options.json.length ) {
+    //     options.body = JSON.stringify(options.json);        
+    // }
 
     // if we have any JSON fields, stick it in the body
-    if ( options.json && options.json.length ) {
-        options.body = JSON.stringify(options.json);        
+    if ( options.json ) {
+        reqOptions.body = JSON.stringify(options.json);        
     }
 
     // if the user has explicitly set for no agent
@@ -924,14 +929,18 @@ AwsSum.prototype.request = function(options, callback) {
     // request new attempt
     request(reqOptions, function (error, response, body) {
         if(response){
-          console.log("Status from riakCS:")
-          console.log(response.statusCode);
-          console.log("Response from riakCS:")
-          console.log(response.body);
+          if (debug){
+            console.log("Status from riakCS:")
+            console.log(response.statusCode);
+            console.log("Response from riakCS:")
+            console.log(response.body);            
+          }
           callback(null, response);
         } else {
-          console.log("Error from riakCS:")
-          console.log(error);
+          if (debug){            
+            console.log("Error from riakCS:")
+            console.log(error);
+          }
           callback(error, null);
         }
       }
