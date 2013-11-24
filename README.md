@@ -1,4 +1,5 @@
-# node-riakcs -- talk to riakCS like you would with awssum
+# node-riakcs 
+#####talk to riakCS like you would with awssum
 
 ## Install
 
@@ -75,7 +76,7 @@ s3.CreateUser userArgs, (err, data)->
 ```
 
 
-### Get use information (as admin user for every user, or for oneself)
+### Get user information (as admin user for every user, or for oneself)
 ```coffeescript
 require 'fmt'
 
