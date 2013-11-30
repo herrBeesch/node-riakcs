@@ -18,33 +18,31 @@ var esc = require('./esc');
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// function hostBucket(options, args) {    
+//     var self = this;    
+//     // return args.BucketName + '.' + self.host() + '/' + esc(args.ObjectName);    
+//     var obj = "";
+//     if (args.ObjectName){
+//       obj = pathObject(options, args)
+//     }
+//     var host = args.BucketName + '.' + self.host()  + obj;
+//     if (!args.BucketName) {
+//       host = self.host() + obj;
+//     }
+//     return host;
+// }
 function hostBucket(options, args) {    
     var self = this;    
-    // return args.BucketName + '.' + self.host() + '/' + esc(args.ObjectName);    
     var obj = "";
     if (args.ObjectName){
       obj = pathObject(options, args)
     }
-    var host = args.BucketName + '.' + self.host() + obj;
     if (!args.BucketName) {
-      host = self.host() + obj;
+      return self.hostname();
     }
-    
-    return host;
-}
-
-function hostUser(options, args) {    
-    var self = this;    
-    var obj = "";
-    if (args.ObjectName){
-      obj = pathObject(options, args)
+    else {
+      return args.BucketName + '.' + self.hostname();
     }
-    var up = ""
-    if (args.UserPath){
-      up = '/' + args.UserPath 
-    }
-    var host = self.host() + up + obj;
-    return host;
 }
 
 function pathObject(options, args) {
@@ -57,6 +55,22 @@ function pathObject(options, args) {
     }
 }
 
+
+function hostUser(options, args) {    
+    var self = this;    
+    var obj = "";
+    if (args.ObjectName){
+      obj = pathObject(options, args)
+    }
+    var up = ""
+    if (args.UserPath){
+      up = '/' + args.UserPath 
+    }
+    var host = self.hostname() + up ;//+ obj;
+    return host;
+}
+
+
 // http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectPUT.html
 function headersMetaDataHeaders(options, args) {
     // let's check the MetaData arg
@@ -68,21 +82,6 @@ function headersMetaDataHeaders(options, args) {
     for(var key in args.MetaData) {
         options.headers['x-amz-meta-' + key] = args.MetaData[key];
     }
-}
-
-function bodyLocationConstraint(options, args) {
-    var self = this;
-
-    if ( !self.locationConstraint() ) {
-        return '';
-    }
-
-    // create the data
-    var data = {
-        _attr : { 'xmlns' : 'http://s3.amazonaws.com/doc/2006-03-01/' },
-        LocationConstraint : self.locationConstraint(),
-    };
-    return data2xml('CreateBucketConfiguration', data);
 }
 
 function bodyAccessControlPolicy(options, args) {
@@ -406,7 +405,9 @@ module.exports = {
 
     ListBuckets : {
         url : 'http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTServiceGET.html',
-        // nothing!
+        method : 'GET',
+        host   : hostBucket,
+        extractBody : 'xml'
     },
 
     // Operations on Buckets
@@ -861,10 +862,6 @@ module.exports = {
         // request
         method : 'PUT',
         host : hostBucket,
-        // path : pathObject,
-        defaults : {
-            LocationConstraint : function(args) { this.region(); }
-        },
         args : {
             BucketName : {
                 required : true,
@@ -906,7 +903,6 @@ module.exports = {
                 note     : 'A comma-separated list of one or more grantees (of the format type=value). Type must be emailAddress, id or url.',
             },
         },
-        body : bodyLocationConstraint,
         // response
         extractBody : 'none',
     },
@@ -1608,7 +1604,7 @@ module.exports = {
                 type     : 'body',
             },
         },
-        addExtras : [ headersMetaDataHeaders, extrasContentMd5 ],
+        //addExtras : [ headersMetaDataHeaders, extrasContentMd5 ],
         // response
         extractBody : 'none',
     },

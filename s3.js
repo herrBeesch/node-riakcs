@@ -22,7 +22,7 @@ var XML = require('xml');
 var data2xml = require('data2xml');
 
 // our own
-var awssum = require('./awssum');
+// var awssum = require('./awssum');
 var riakcs = require('./riakcs');
 var operations = require('./s3-config');
 var esc = require('./esc');
@@ -33,12 +33,6 @@ var esc = require('./esc');
 var MARK = 'riakcs: ';
 
 var endPoint = {};
-
-
-
-// From: http://docs.amazonwebservices.com/general/latest/gr/rande.html#s3_region
-var locationConstraint = {};
-locationConstraint[riakcs.MYREGION] = "";
 
 var version = '2006-03-01';
 
@@ -81,30 +75,17 @@ var S3 = function(opts) {
     // call the superclass for initialisation
     S3.super_.call(this, opts);
 
-    // check the region is valid
-    if ( ! endPoint[opts.region] ) {
-        throw MARK + "invalid region '" + opts.region + "'";
-    }
-
     return self;
 };
 
-// inherit from GreenQloud
+// inherit from RiakCS
 util.inherits(S3, riakcs.RiakCS);
 
 // --------------------------------------------------------------------------------------------------------------------
 // methods we need to implement from awssum.js/amazon.js
 
-S3.prototype.host = function() {
-    return endPoint[this.region()];
-};
-
 S3.prototype.version = function() {
     return version;
-};
-
-S3.prototype.locationConstraint = function() {
-    return locationConstraint[this.region()];
 };
 
 // From: http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTCommonRequestHeaders.html
@@ -119,7 +100,7 @@ S3.prototype.addCommonOptions = function(options, args) {
     // make the strToSign, create the signature and sign it
     var strToSign = self.strToSign(options, args);
     var signature = self.signature(strToSign);
-    options.headers.Authorization = 'AWS ' + self.accessKeyId() + ':' + signature;
+    // options.headers.Authorization = 'AWS ' + self.accessKeyId() + ':' + signature;
 };
 
 // From: http://docs.amazonwebservices.com/AmazonS3/latest/dev/RESTAuthentication.html
@@ -237,8 +218,12 @@ S3.prototype.extractBodyWhenError = function(options) {
 // operations on the service
 
 _.each(operations, function(operation, operationName) {
-    S3.prototype[operationName] = awssum.makeOperation(operation);
+    var self = this;
+    S3.prototype[operationName] = riakcs.makeOperation(operation);
 });
+
+
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // exports
