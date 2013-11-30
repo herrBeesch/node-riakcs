@@ -1,5 +1,5 @@
 # node-riakcs 
-##### lib for riak cloud storage
+##### npm-package for riak cloud storage
 
 ## Install
 
