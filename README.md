@@ -77,7 +77,7 @@ args = {
   BucketName : 'myBucket'
 }
 
-s3.DeleteOBJECT Args , (err, data)->
+s3.DeleteObject Args , (err, data)->
   if err?
     fmt.dump err, 'err'
   else  
