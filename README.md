@@ -1,5 +1,5 @@
 # node-riakcs 
-#####talk to riakCS like you would with awssum
+##### lib for riak cloud storage
 
 ## Install
 
