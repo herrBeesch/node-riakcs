@@ -24,7 +24,7 @@ var esc = require('./esc');
 
 var MARK = 'riakcs: ';
 
-var debug = true;
+var debug = false;
 
 // create our XML parser
 var parser = new xml2js.Parser({ normalize : false, trim : false, explicitRoot : true });
