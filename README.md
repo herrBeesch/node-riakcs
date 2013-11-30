@@ -12,7 +12,7 @@
 Request is designed to be the simplest way possible to make http calls. It supports HTTP.
 
 ```javascript
-var S3, awssum, riakcs, s3;
+var S3, riakcs, s3;
 riakcs = require('node-riakcs');
 S3 = riakcs.load('s3').S3;
 
