@@ -35,7 +35,7 @@ s3.ListBuckets (err, data)->
     fmt.dump data, 'data'
 ```
 
-### Create a Bucket
+### Create a bucket
 
 ```coffeescript
 require 'fmt'
@@ -51,6 +51,38 @@ s3.CreateBucket bucketArgs , (err, data)->
     fmt.dump data, 'data'
 ```
 
+### Delete a bucket
+
+```coffeescript
+require 'fmt'
+
+bucketArgs = {
+  BucketName : 'myBucket'
+}
+
+s3.DeleteBucket bucketArgs , (err, data)->
+  if err?
+    fmt.dump err, 'err'
+  else  
+    fmt.dump data, 'data'
+```
+
+### Delete an object
+
+```coffeescript
+require 'fmt'
+
+args = {
+  ObjectName : 'myObject',
+  BucketName : 'myBucket'
+}
+
+s3.DeleteOBJECT Args , (err, data)->
+  if err?
+    fmt.dump err, 'err'
+  else  
+    fmt.dump data, 'data'
+```
 
 ### Create a user (as admin user)
 
