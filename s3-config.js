@@ -17,20 +17,6 @@ var crypto = require('crypto');
 var esc = require('./esc');
 
 // --------------------------------------------------------------------------------------------------------------------
-
-// function hostBucket(options, args) {    
-//     var self = this;    
-//     // return args.BucketName + '.' + self.host() + '/' + esc(args.ObjectName);    
-//     var obj = "";
-//     if (args.ObjectName){
-//       obj = pathObject(options, args)
-//     }
-//     var host = args.BucketName + '.' + self.host()  + obj;
-//     if (!args.BucketName) {
-//       host = self.host() + obj;
-//     }
-//     return host;
-// }
 function hostBucket(options, args) {    
     var self = this;    
     var obj = "";

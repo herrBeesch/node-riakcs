@@ -759,6 +759,7 @@ RiakCS.prototype.request = function(options, callback) {
     var reqOptions = {
         headers : options.headers,
         method  : options.method,
+        host    : options.host,
         proxy   : options.proxy,
         uri     : options.protocol + '://' + options.host + options.path,
         body    : options.body,        
