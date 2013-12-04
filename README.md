@@ -67,6 +67,30 @@ s3.DeleteBucket bucketArgs , (err, data)->
     fmt.dump data, 'data'
 ```
 
+### Put an object (file)
+
+```coffeescript
+fmt = require 'fmt'
+fs = require 'fs'
+
+__filename ='my_local_song.mp3'
+
+fs.stat __filename, (err, file_info)->
+  data = fs.readFileSync( __filename )
+  createArgs = {
+    BucketName    : 'mybucket',
+    ObjectName    : 'my_bucket_song.mp3',
+    ContentLength : file_info.size,
+    Body          : data
+  } 
+  
+  s3.PutObject createArgs, (error, result)->
+    if error?
+      fmt.dump error, 'err'
+    else          
+      fmt.dump result, 'data'
+```
+
 ### Delete an object
 
 ```coffeescript

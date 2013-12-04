@@ -58,9 +58,7 @@ var RiakCS = function(opts) {
     secretAccessKey     = opts.secretAccessKey;
     hostname            = opts.hostname;
     protocol            = opts.protocol;
-    if ( opts.awsAccountId ) {
-        awsAccountId = opts.awsAccountId;
-    }
+    proxy               = opts.proxy;
 
     self.setAccessKeyId     = function(newStr) { accessKeyId = newStr; };
     self.setSecretAccessKey = function(newStr) { secretAccessKey = newStr; };
@@ -68,6 +66,8 @@ var RiakCS = function(opts) {
     self.accessKeyId     = function() { return accessKeyId;     };
     self.secretAccessKey = function() { return secretAccessKey; };
     self.hostname        = function() { return hostname;        };
+    self.protocol        = function() { return protocol;        };
+    self.proxy           = function() { return proxy;        };
     
     if ( typeof opts.agent !== 'undefined' ) {
         self._agent = opts.agent;
@@ -138,8 +138,6 @@ RiakCS.prototype.strToSign = function(options) {
     ;
     strToSign += pvPairs;
     
-    // console.log('StrToSign:', strToSign);
-
     return strToSign;
 };
 
@@ -261,8 +259,6 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
     var self = this;
 
     var argName, spec; // for iterations later in the function
-
-    // console.log(operation, args, opts, callback);
 
     // extend the args with the defaults for this operation (e.g. Action, Target)
     if ( operation.defaults ) {
@@ -394,8 +390,8 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
         secret: self.secretAccessKey()
       };
     }
-     
-
+    
+    
     // build all of the params and headers, and copy the body if user-supplied
     options.params = [];
     options.headers = {};
@@ -760,15 +756,11 @@ RiakCS.prototype.request = function(options, callback) {
     
     // since this can be called on both close and end, just do it once 
     callback = _.once(callback);
-    console.log(options.headers['Content-Length']);
     var reqOptions = {
-        // headers : options.headers,
-        headers : {
-          
-        },
+        headers : options.headers,
         method  : options.method,
+        proxy   : options.proxy,
         uri     : options.protocol + '://' + options.host + options.path,
-        host    : options.hostname,
         body    : options.body,        
         aws     : options.aws
     };
@@ -781,7 +773,7 @@ RiakCS.prototype.request = function(options, callback) {
     
     
     // if we have any JSON fields, stick it in the body
-    if ( options.json ) {
+    if ( options.json && options.json.length) {
         reqOptions.body = JSON.stringify(options.json);        
     }
     
@@ -801,8 +793,6 @@ RiakCS.prototype.request = function(options, callback) {
         console.log('reqOptions = ', reqOptions);
     }
     
-    
-    // request new attempt
     request(reqOptions, function (error, response, body) {
         if(response){
           if (debug){
