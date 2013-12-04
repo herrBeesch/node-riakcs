@@ -17,9 +17,11 @@ riakcs = require('node-riakcs');
 S3 = riakcs.load('s3').S3;
 
 var s3 = new S3({
-    'accessKeyId' : "<YOUR_KEY_ID>",
-    'secretAccessKey' : "<YOUR_SECRET>",
-    'hostname' : "<YOUR_HOST>"
+    'accessKeyId' : "<YOUR_KEY_ID>", //required
+    'secretAccessKey' : "<YOUR_SECRET>", //required
+    'hostname' : "<YOUR_HOST>", //required
+    'protocol' : "http", //optional
+    'proxy' : "http://localhost:8080", //optional
 });
 ```
 ## Examples (coffeescript + fmt)

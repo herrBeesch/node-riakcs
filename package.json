@@ -1,7 +1,7 @@
 {
   "name": "node-riakcs",
   "description": "npm package for NodeJS to talk to riakCS",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": {
     "name": "Andy Beuge",
     "email": "a.beuge@betzold.de",
