@@ -10,6 +10,8 @@
 
 var util = require("util");
 var crypto = require('crypto');
+var http = require('http');
+var https = require('https');
 
 // dependencies
 var _ = require('underscore');
@@ -29,7 +31,7 @@ var debug = false;
 // create our XML parser
 var parser = new xml2js.Parser({ normalize : false, trim : false, explicitRoot : true });
 
-var userAgent = 'NodeRiakCs';
+var userAgent = 'NodeRiakCS';
 
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -590,11 +592,17 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
     }
 
     // now send the request
-    self.request( options, function(err, res) {
+    if( typeof options.body.pipe === "function" && options.body.readable ) {
+      sendRequest = self.requestStreamable
+    }
+    else {
+      sendRequest = self.request      
+    }
+    sendRequest( options, function(err, res) {
         // an error with the request is an error full-stop
         if ( err ) {
             callback({
-                Code : 'AwsSum-Request',
+                Code : 'RiakCS-Request',
                 Message : 'Something went wrong during the request',
                 OriginalError : err
             }, null);
@@ -812,6 +820,132 @@ RiakCS.prototype.request = function(options, callback) {
         }
       }
     )
+};
+
+RiakCS.prototype.requestStreamable = function(options, callback) {
+    var self = this;
+
+    // check here that we have everything
+
+    // since this can be called on both close and end, just do it once
+    callback = _.once(callback);
+
+    var reqOptions = {
+        method  : options.method,
+        host    : options.host,
+        path    : options.path,
+        headers : options.headers
+    };
+
+    // if we have a port, then put that onto the request (can make local testing easier with a local server)
+    if ( options.port ) {
+        reqOptions.port = options.port;
+    }
+
+    // if we have any params, put them onto the path
+    if ( options.params && options.params.length ) {
+        reqOptions.path += '?' + stringifyQuery( options.params );
+    }
+
+    // if we have any JSON fields, stick it in the body
+    if ( options.json && options.json.length ) {
+        options.body = JSON.stringify(options.json);
+    }
+
+    // if the user has explicitly set for no agent
+    if ( self.agent() === false ) {
+        reqOptions.agent = false;
+    }
+    else if ( self.agent() !== undefined ) {
+        // else, they have specifically set one
+        reqOptions.agent = self.agent();
+    }
+    else {
+        // no agent, use the default one
+    }
+
+    if ( debug ) {
+        console.log('awssum.js:request(): reqOptions = ', reqOptions);
+        console.log('awssum.js:request(): body       = ', options.body);
+    }
+
+    // do the request
+    var requestFn = options.protocol === 'https' ? https.request : http.request;
+    var req = requestFn( reqOptions, function(res) {
+        // if we want to stream, just callback now
+        if ( options.stream ) {
+            // call back now
+            return callback(null, res);
+        }
+
+        // EVERYTHING from here on is because the user isn't streaming, we're doing our standard decode (as applicable)
+
+        // save all of these buffers, but only if there is no writeStream
+        var buffers = [];
+        var length = 0;
+
+        res.on('data', function(chunk) {
+            // store the buffer and sum the lengths
+            buffers.push(chunk);
+            length += chunk.length;
+        });
+
+        // if the connection terminates before end is emitted, it's an error
+        res.on('close', function(err) {
+            callback(err, null);
+        });
+
+        // when we get our full response back, it's all good!
+        res.on('end', function() {
+            // process the complete body into res.body
+            res.body = new Buffer(length);
+            var offset = 0;
+            buffers.forEach(function(v, i) {
+                v.copy(res.body, offset);
+                offset += v.length;
+            });
+            callback(null, res);
+        });
+    });
+
+    // ---
+    // catch things like "Error: getaddrinfo ENOENT"
+    req.on('error', function(e) {
+        if ( debug ) {
+            console.log('awssum.js:request(): request error = ', e);
+        }
+        callback(e);
+    });
+
+    // ---
+
+    // finally, if there is no body, just end the request
+    if ( _.isUndefined(options.body) ) {
+        req.end();
+        return;
+    }
+
+    // if it's a string, send it and end it
+    if ( typeof options.body === 'string' || options.body instanceof Buffer) {
+        req.write(options.body);
+        req.end();
+        return;
+    }
+
+    // it must be a stream, but check it anyway
+    if( typeof options.body.pipe === "function" && options.body.readable ) {
+        // if the body is a readableStream, pipe it. (pipe automatically ends the request)
+        options.body.pipe(req);
+        options.body.on('error', function(err) {
+            callback(err, null);
+            req.end(); // todo: determine if this is necessary
+        });
+        return;
+    }
+
+    // if we're still here, it's presumably an empty body so just end the request as if ok!
+    req.end();
+    return;
 };
 
 // do our own strigify query, since querystring.stringify doesn't do what we want (for AWS and others)

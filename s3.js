@@ -100,7 +100,7 @@ S3.prototype.addCommonOptions = function(options, args) {
     // make the strToSign, create the signature and sign it
     var strToSign = self.strToSign(options, args);
     var signature = self.signature(strToSign);
-    // options.headers.Authorization = 'AWS ' + self.accessKeyId() + ':' + signature;
+    options.headers.Authorization = 'AWS ' + self.accessKeyId() + ':' + signature;
 };
 
 // From: http://docs.amazonwebservices.com/AmazonS3/latest/dev/RESTAuthentication.html

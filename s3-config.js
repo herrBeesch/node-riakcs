@@ -1590,7 +1590,7 @@ module.exports = {
                 type     : 'body',
             },
         },
-        //addExtras : [ headersMetaDataHeaders, extrasContentMd5 ],
+        addExtras : [ headersMetaDataHeaders, extrasContentMd5 ],
         // response
         extractBody : 'none',
     },
