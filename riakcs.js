@@ -347,7 +347,7 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
 
     // build the hostname
     options.hostname = self.hostname(args);
-    if ( operation.hostanme ) {
+    if ( operation.hostname ) {
         if ( typeof operation.hostname === 'function' ) {
             options.hostname = operation.hostname.apply(self, [ options, args ]);
         }
