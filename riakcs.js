@@ -362,6 +362,23 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
 
     // ---
 
+    // build the proxy
+    options.proxy = self.proxy(args);
+    if ( operation.proxy ) {
+        if ( typeof operation.proxy === 'function' ) {
+            options.proxy = operation.proxy.apply(self, [ options, args ]);
+        }
+        else if ( typeof operation.proxy === 'string' ) {
+            options.proxy = operation.proxy;
+        }
+        else {
+            // since this is a program error, we're gonna throw this one
+            throw 'Unknown operation.proxy : ' + typeof operation.proxy;
+        }
+    }
+
+    // ---
+
     // build the path
     options.path = '';
     if ( operation.path ) {
