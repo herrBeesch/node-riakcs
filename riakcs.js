@@ -347,7 +347,7 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
 
     // build the hostname
     options.hostname = self.hostname(args);
-    if ( operation.hostanme ) {
+    if ( operation.hostname ) {
         if ( typeof operation.hostname === 'function' ) {
             options.hostname = operation.hostname.apply(self, [ options, args ]);
         }
@@ -357,6 +357,23 @@ RiakCS.prototype.send = function(operation, args, opts, callback) {
         else {
             // since this is a program error, we're gonna throw this one
             throw 'Unknown operation.hostname : ' + typeof operation.hostname;
+        }
+    }
+
+    // ---
+
+    // build the proxy
+    options.proxy = self.proxy(args);
+    if ( operation.proxy ) {
+        if ( typeof operation.proxy === 'function' ) {
+            options.proxy = operation.proxy.apply(self, [ options, args ]);
+        }
+        else if ( typeof operation.proxy === 'string' ) {
+            options.proxy = operation.proxy;
+        }
+        else {
+            // since this is a program error, we're gonna throw this one
+            throw 'Unknown operation.proxy : ' + typeof operation.proxy;
         }
     }
 
